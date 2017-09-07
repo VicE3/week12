@@ -3,11 +3,7 @@ import './App.css';
 
 const initState = {
   input: '',
-  comments: [
-    {text: '', likes: 0, dislikes: 0, replies: [
-      {text: '', likes: 0, dislikes: 0,}
-    ]}
-  ],
+  comments: [],
 }
 
 class App extends Component {
@@ -32,24 +28,47 @@ handleSubmit() {
 // ADD NEW COMMENT TO COPYSTATECOPY W/ COPYOFSTATE.COMMENTS.PUSH(COMMENT)
 // UPDATE STATE WITH COPYOFSTATE
   const copyOfState = Object.assign( {}, this.state);
-  copyOfState.comments.text = this.state.input;
-  copyOfState.comments.push(copyOfState.comments.text);
+  let commentGrouping =
+    {text: this.state.input, likes: 0, dislikes: 0, replies: [
+      {text: '', likes: 0, dislikes: 0,}
+    ]}
+  copyOfState.comments.push(commentGrouping);
   copyOfState.input = '';
   this.setState(copyOfState);
 }
 
-handleLike() {
-  let increaseLikes = this.state.comments[0].likes++
-  this.setState({
-    likes: increaseLikes
-  })
+handleLike(i) {
+  const copyOfState = Object.assign( {}, this.state);
+  let increaseLikes = (copyOfState.comments[i].likes++)
+
+  this.setState(copyOfState)
 }
 
+handleDislike(i) {
+  const copyOfState = Object.assign( {}, this.state);
+  let increaseLikes = (copyOfState.comments[i].dislikes++)
+  this.setState(copyOfState)
+}
+
+handleDelete(i) {
+  const copyOfState = Object.assign( {}, this.state);
+  delete copyOfState.comments[i]
+  this.setState(copyOfState)
+}
+
+handleReply(i) {
+
+}
 
   render() {
     const addToPage = this.state.comments.map(function(txt, i) {
       return (
-        <li>{txt.text}<button onClick={this.handleLike}>like</button></li>
+        <li>{txt.text}
+        <button onClick={() => this.handleLike(i)}>Like {this.state.comments[i].likes}</button>
+        <button onClick={() => this.handleDislike(i)}>Dislike {this.state.comments[i].dislikes}</button>
+        <button onClick={() => this.handleDelete(i)}>Delete</button>
+        <button onClick={() => this.handleReply(i)}>Reply</button>
+        </li>
       )
     } , this)
     return (
