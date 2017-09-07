@@ -2,80 +2,63 @@ import React, { Component } from 'react';
 import './App.css';
 
 const initState = {
- "commentAcessories": {
-    'input': '',
-    'thumbsUp': 0,
-    'thumbsDown': 0
-  },
-  text: [],
-
+  input: '',
+  comments: [
+    {text: '', likes: 0, dislikes: 0, replies: [
+      {text: '', likes: 0, dislikes: 0,}
+    ]}
+  ],
 }
 
 class App extends Component {
   constructor() {
     super();
     this.state = initState;
-    this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.delete = this.delete.bind(this);
-    this.thumUp = this.thumUp.bind(this);
-    this.thumDown = this.thumDown.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLike = this.handleLike.bind(this);
   }
 
 handleChange(e) {
+//TAKE VALUE OF INPUT FIELD, SET IT EQUAL TO INPUT, UPDATE THE STATE
   this.setState({
     input: e.target.value
   })
 }
 
-handleClick() {
+handleSubmit() {
+// GET COPY OF STATE - COPYOFSTATE
+// CREATE NEW COMMENT - COMMENT.TEXT = THIS.STATE.input
+// ADD NEW COMMENT TO COPYSTATECOPY W/ COPYOFSTATE.COMMENTS.PUSH(COMMENT)
+// UPDATE STATE WITH COPYOFSTATE
   const copyOfState = Object.assign( {}, this.state);
-  copyOfState.text.push(this.state.input);
+  copyOfState.comments.text = this.state.input;
+  copyOfState.comments.push(copyOfState.comments.text);
   copyOfState.input = '';
   this.setState(copyOfState);
 }
 
-delete() {
-  const copyOfState = Object.assign( {}, this.state);
-  copyOfState.text.pop(this.state.input);
-  copyOfState.input = '';
-  this.setState(copyOfState);
-}
-
-thumUp(e) {
-//let thum = this.state.thumbsUp;
-let { thumbsUp } = this.state;
-  thumbsUp++
+handleLike() {
+  let increaseLikes = this.state.comments[0].likes++
   this.setState({
-    thumbsUp,
-  })
-}
-
-thumDown(event) {
-thumDown: event.target.value
-let thum = this.state.commentAcessories.thumbsDown;
-  thum++
-  this.setState({
-    thumbsDown: thum,
+    likes: increaseLikes
   })
 }
 
 
   render() {
-    const addToPara = this.state.text.map(function(txt, i) {
-       return (
-         <li>{txt}<button onClick={this.delete}>Delete</button><button onClick={this.thumUp}>Thumbs Up {this.state.commentAcessories.thumbsUp}</button><button onClick={this.thumDown}>Thumbs Down {this.state.commentAcessories.thumbsDown}</button></li>
-       )
-
-    }, this);
-
+    const addToPage = this.state.comments.map(function(txt, i) {
+      return (
+        <li>{txt.text}<button onClick={this.handleLike}>like</button></li>
+      )
+    } , this)
     return (
       <div id='container'>
         <h1>Please Enter Text</h1>
-        <input type="text" id="box" onChange={this.handleChange} value={this.state.input} />
-        <button onClick={this.handleClick}>Submit</button>
+        <input type="text" id="box"  onChange={this.handleChange} value={this.state.input} />
+        <button onClick={this.handleSubmit}>Submit</button>
         <ul>
-          {addToPara}
+          {addToPage}
         </ul>
       </div>
     );
