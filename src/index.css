@@ -1,5 +1,23 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+li {
+  list-style: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 25px
+}
+
+.LorDLBtn {
+  border-radius: 100%;
+  background-color: white;
+  border: 1px solid grey;
+  height: 40px;
+  width: 40px;
+  font-size: 30px;
+}
+
+.numberOf {
+  font-size: 20px;
+}
+
+.replyBox {
+  border-style: none;
 }
